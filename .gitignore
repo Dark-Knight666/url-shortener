@@ -1,0 +1,36 @@
+# Environment files - NEVER ins Git einchecken!
+.env
+.env.local
+.env.production
+*.env
+
+# Node
+node_modules/
+.next/
+out/
+npm-debug.log*
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+dist/
+*.egg-info/
+
+# Docker
+*.tar
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Kubernetes Secrets - nie ins Git!
+k8s/secrets.yaml
