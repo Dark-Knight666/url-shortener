@@ -1,10 +1,8 @@
 pipeline {
   agent any
-
   environment {
     IMAGE = "megoone/url-shortener"
   }
-
   stages {
     stage('Build') {
       steps {
@@ -14,7 +12,6 @@ pipeline {
         sh 'docker tag $IMAGE-frontend:$BUILD_NUMBER $IMAGE-frontend:latest'
       }
     }
-
     stage('Push') {
       steps {
         withCredentials([usernamePassword(
@@ -26,13 +23,8 @@ pipeline {
           sh 'docker push $IMAGE-backend:latest'
           sh 'docker push $IMAGE-frontend:$BUILD_NUMBER'
           sh 'docker push $IMAGE-frontend:latest'
+          sh 'docker logout'
         }
-      }
-    }
-
-    stage('Deploy') {
-      steps {
-        sh 'kubectl apply -f k8s/'
       }
     }
   }
