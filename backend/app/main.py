@@ -10,7 +10,6 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# CORS — erlaubt dem Frontend mit dem Backend zu reden
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -18,9 +17,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Routen registrieren
-app.include_router(router)
 
 @app.get("/health")
 def health_check():
@@ -31,3 +27,7 @@ def health_check():
 def startup():
     """Datenbanktabellen beim Start erstellen."""
     Base.metadata.create_all(bind=engine)
+
+# Router NACH den expliziten Routen einbinden,
+# damit die Catch-all-Route /health nicht überschattet
+app.include_router(router)
