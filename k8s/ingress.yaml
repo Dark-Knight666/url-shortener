@@ -3,23 +3,12 @@ kind: Ingress
 metadata:
   name: url-shortener-ingress
   namespace: url-shortener
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
   rules:
-    - host: url-shortener.homelab.local
+    - host: mehmets-projekte.de
       http:
         paths:
-          # Frontend — Hauptseite
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: frontend
-                port:
-                  number: 3000
-          # Backend API
           - path: /api
             pathType: Prefix
             backend:
@@ -27,11 +16,17 @@ spec:
                 name: backend
                 port:
                   number: 8000
-          # Redirect-Endpunkt
-          - path: /
+          - path: /r
             pathType: Prefix
             backend:
               service:
                 name: backend
                 port:
                   number: 8000
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 3000
