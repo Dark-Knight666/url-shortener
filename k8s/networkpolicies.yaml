@@ -1,3 +1,57 @@
+# 1. Default-Deny: blockiert alles Eingehende, was nicht explizit erlaubt ist
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+  namespace: url-shortener
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+---
+# 2. Frontend: nur vom Ingress-Controller, Port 3000
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-to-frontend
+  namespace: url-shortener
+spec:
+  podSelector:
+    matchLabels:
+      app: frontend
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 3000
+---
+# 3. Backend: nur vom Ingress-Controller, Port 8000
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-to-backend
+  namespace: url-shortener
+spec:
+  podSelector:
+    matchLabels:
+      app: backend
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 8000
+---
+# 4. Postgres: nur vom Backend, Port 5432
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
