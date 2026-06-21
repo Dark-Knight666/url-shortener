@@ -1,29 +1,27 @@
-# ── Stage 1: Base ─────────────────────────────────────────────────────────────
+# Stage 1: Base
 FROM python:3.12-slim AS base
 
 WORKDIR /app
 
-# System-Abhängigkeiten
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Requirements zuerst kopieren (Docker Cache nutzen)
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# ── Stage 2: Production ────────────────────────────────────────────────────────
+# Stage 2: Production
 FROM base AS production
 
 WORKDIR /app
 
 COPY app/ ./app/
 
-# Kein Root-User in Production!
-RUN adduser --disabled-password --gecos "" appuser
-USER appuser
+# Non-root user mit fester UID, damit Kubernetes runAsNonRoot durchsetzen kann
+RUN adduser --disabled-password --gecos "" --uid 1001 appuser
+USER 1001
 
 EXPOSE 8000
 
