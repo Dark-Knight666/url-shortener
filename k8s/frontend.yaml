@@ -15,12 +15,9 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: megoone/url-shortener-frontend:latest
+          image: megoone/url-shortener-frontend:11
           ports:
             - containerPort: 3000
-          env:
-            - name: NEXT_PUBLIC_API_URL
-              value: "https://mehmets-projekte.de"
           resources:
             requests:
               cpu: "100m"
