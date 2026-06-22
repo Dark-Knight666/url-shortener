@@ -12,9 +12,9 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://mehmets-projekte.de"],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
 
@@ -28,6 +28,4 @@ def startup():
     """Datenbanktabellen beim Start erstellen."""
     Base.metadata.create_all(bind=engine)
 
-# Router NACH den expliziten Routen einbinden,
-# damit die Catch-all-Route /health nicht überschattet
 app.include_router(router)
