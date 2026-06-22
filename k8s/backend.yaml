@@ -20,7 +20,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: backend
-          image: megoone/url-shortener-backend:10
+          image: megoone/url-shortener-backend:12
           ports:
             - containerPort: 8000
           securityContext:
